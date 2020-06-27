@@ -1,4 +1,4 @@
-# david-chu.github.io
+# thedavidchu.github.io
 Welcome to my personal website!
 
 ## About
