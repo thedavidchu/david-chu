@@ -9,12 +9,40 @@ title {
 body {
 	background-color: darkgreen;
 }
-h1 {color: red;}
-p {color: blue;}
+
+h1 {
+	color: red;
+	font-size: 48;
+}
+
+h2 {
+	font-size: 36;
+}
+
+h3 {
+	font-size: 24;
+}
+
+p {
+	color: blue;
+}
 
 
 /* Navigation */
+.top_nav_external {
+	position: relative;
+	float: left;
+}
 
+.top_nav_internal {
+	position: relative;
+	float: right;
+	color: limegreen;
+	text-align: center;
+	padding: 12px 25px;
+	text-decoration: none;
+	font-size: 24px;
+}
 
 /* Name */
 
