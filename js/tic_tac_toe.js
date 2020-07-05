@@ -91,29 +91,20 @@ function analyze_board(board){
 	// 678
 	// Check win conditions. (012,345,678; 036,147,258; 048,246)
 	/*  */if(board[0]==board[1] && board[0]==board[2] && board[0]!=0){
-		console.log(0);
 		return board[0];
 	}else if(board[3]==board[4] && board[3]==board[5] && board[3]!=0){
-		console.log(1);
 		return board[3];
 	}else if(board[6]==board[7] && board[6]==board[8] && board[6]!=0){
-		console.log(2);
 		return board[6];
 	}else if(board[0]==board[3] && board[0]==board[6] && board[0]!=0){
-		console.log(3);
 		return board[0];
 	}else if(board[1]==board[4] && board[1]==board[7] && board[1]!=0){
-		console.log(4);
 		return board[1];
 	}else if(board[2]==board[5] && board[2]==board[8] && board[2]!=0){
-		console.log(5);
 		return board[2];
 	}else if(board[0]==board[4] && board[0]==board[8] && board[0]!=0){
-		console.log(6);
 		return board[0];
 	}else if(board[2]==board[4] && board[2]==board[6] && board[2]!=0){
-		console.log(7);
-		console.log(board[2]);
 		return board[2];
 	}
 
@@ -169,7 +160,6 @@ function get_board(){
 	for(i=0;i<9;i++){
 		board[i] = parseInt(document.getElementById("ttt_"+i).value);			// Does this case i to string?
 	}
-	console.log('Board:', board);
 	return board;
 }
 
@@ -217,14 +207,11 @@ function ttt_main_buttons(pushed_button){
 	state = analyze_board(board);
 
 	if(state == 1 || state == 2){
-		console.log("Win by", state);
 		document.getElementById("ttt").innerHTML = "Player "+state+" won!";
 		end_game();
 
 	}else if(state == "3"){
-		console.log("Cat's game!");
 		document.getElementById("ttt").innerHTML = "Cat's Game!";
 		end_game();
 	}
-	console.log("END TURN", state);
 }
