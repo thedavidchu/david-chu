@@ -4,6 +4,8 @@ x.src = 'http://example.com/test.js';
 document.getElementsByTagName("head")[0].appendChild(x);
 */
 
+/* ================================================== drag.js ================================================== */
+
 function allowDrop(ev) {
   ev.preventDefault();
 }
@@ -17,6 +19,8 @@ function drop(ev){
 	var data = ev.dataTransfer.getData("text");
 	ev.target.appendChild(document.getElementById(data));
 }
+
+/* ================================================== chess_gen_board.js ================================================== */
 
 function setup_empty_chess_board(){
 	var div;
@@ -32,8 +36,25 @@ function setup_empty_chess_board(){
 			div.innerHTML = populate_chess_pieces(i*8 + j); //"<img src='static/images/white-pawn.PNG'>"//
 			//console.log(populate_chess_pieces(i*8 + j));
 			div.id = "chess_" + (i*8 +j);
+			/*
 			div.ondrop=drop(event);
 			div.ondragover=allowDrop(event);
+			*/
+			/* Event fired on the drag target */
+			document.addEventListener("dragstart", function(event) {
+				event.dataTransfer.setData("Text", event.target.id);
+			});
+
+			/* Events fired on the drop target */
+			document.addEventListener("dragover", function(event) {
+				event.preventDefault();
+			});
+
+			document.addEventListener("drop", function(event) {
+				event.preventDefault();
+				var data = event.dataTransfer.getData("Text");
+				event.target.appendChild(document.getElementById(div.id));
+			});
 
 			if(colour){
 				div.style="background-color: black";
