@@ -5,11 +5,12 @@ function allowDrop(ev) {
 }
 
 function drag(ev){
- 	ev.dataTransfer.setData("text", ev.target.id);
+ 	ev.dataTransfer.setData("img", ev.target.id);
 }
 
 function drop(ev){
 	ev.preventDefault();								// Allow drop
-	var data = ev.dataTransfer.getData("text");
+	var data = ev.dataTransfer.getData("img");			// "img" or "text"
+	console.log(data);
 	ev.target.appendChild(document.getElementById(data));
 }

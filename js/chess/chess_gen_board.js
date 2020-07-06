@@ -6,17 +6,20 @@ document.getElementsByTagName("head")[0].appendChild(x);
 
 /* ================================================== drag.js ================================================== */
 
+// Drag and drop icons
+
 function allowDrop(ev) {
   ev.preventDefault();
 }
 
 function drag(ev){
- 	ev.dataTransfer.setData("text", ev.target.id);
+ 	ev.dataTransfer.setData("img", ev.target.id);
 }
 
 function drop(ev){
 	ev.preventDefault();								// Allow drop
-	var data = ev.dataTransfer.getData("text");
+	var data = ev.dataTransfer.getData("img");			// "img" or "text"
+	console.log(data);
 	ev.target.appendChild(document.getElementById(data));
 }
 
@@ -33,28 +36,25 @@ function setup_empty_chess_board(){
 			// Create board
 			div = document.createElement("div");
 
-			div.innerHTML = populate_chess_pieces(i*8 + j); //"<img src='static/images/white-pawn.PNG'>"//
-			//console.log(populate_chess_pieces(i*8 + j));
+			div.innerHTML = populate_chess_pieces(i*8 + j);
 			div.id = "chess_" + (i*8 +j);
-			/*
-			div.ondrop=drop(event);
-			div.ondragover=allowDrop(event);
-			*/
+
 			/* Event fired on the drag target */
-			document.addEventListener("dragstart", function(event) {
-				event.dataTransfer.setData("Text", event.target.id);
-			});
+			document.ondragstart = function(event) {
+				event.dataTransfer.setData("IMG", event.target.id);
+			};
 
 			/* Events fired on the drop target */
-			document.addEventListener("dragover", function(event) {
+			document.ondragover = function(event) {
 				event.preventDefault();
-			});
+			};
 
-			document.addEventListener("drop", function(event) {
+			document.ondrop = function(event) {
 				event.preventDefault();
-				var data = event.dataTransfer.getData("Text");
-				event.target.appendChild(document.getElementById(div.id));
-			});
+				var data = event.dataTransfer.getData("IMG");
+				event.target.appendChild(document.getElementById(data));								// Use 'data' as id
+			};
+			
 
 			if(colour){
 				div.style="background-color: black";
@@ -65,6 +65,7 @@ function setup_empty_chess_board(){
 			}
 
 			chess_board.appendChild(div);
+			console.log(chess_board);
 		}
 		colour = !colour;
 		// Insert line break
@@ -100,14 +101,10 @@ function populate_chess_pieces(position){
 	var piece = board[position];
 	var img;
 	switch(piece){
-		case 10:
-			/*
-			img = document.createElement("img");
-			img.src = setAttribute("src", 'static/images/white-pawn.PNG');*/
-			//img.src="static/images/white-pawn.PNG";								// Does not take ../../static/images/white-pawn.PNG
-			return "<img src='static/images/white-pawn.PNG'>";
-			return "P";
-			break;		
+		case 10: //<img src="static/images/white-pawn.png" draggable="true" ondragstart="drag(event)" id="drag1">
+			return "<img src='static/images/white-pawn.PNG' draggable='true' ondragstart='drag(event)' id='pawn_" + position + "'>";								// Does not like constructing it from scratch
+			//return "P";
+			//break;		
 		case 11:
 			return "N";
 			break;
