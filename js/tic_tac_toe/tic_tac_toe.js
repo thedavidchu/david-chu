@@ -101,6 +101,7 @@ function get_player(board){
 	}
 }
 
+
 function get_move(pushed_button, player){
 	var char;
 	switch(player){
@@ -117,8 +118,8 @@ function get_move(pushed_button, player){
 	document.getElementById(pushed_button).innerHTML = char;
 	document.getElementById(pushed_button).value = player;
 	document.getElementById(pushed_button).disabled = true;
-
 }
+
 
 function ttt_main_buttons(pushed_button){
 	var board = get_board();
