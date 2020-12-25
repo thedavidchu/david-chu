@@ -1,96 +1,119 @@
-<!--
-Main page HTML layout
--->
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <!-- Not sure that this is, but I copied it from Matt Ing's -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!--
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
-        -->
-    <link rel="stylesheet" href="static/stylesheet.css">
-    <link rel="icon" type="image/png" sizes="32x32" href="static/favicon_three.png">
-    
-    <title>David Chu - Main page</title>
-</head>
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-<body>
-    <div class="top_nav_bar" id="top_nav_bar">
-        <!-- This is in two sections.
-            1. Further websites (Github, LinkedIn)
-            2. Other pages (About me, Projects, Contact)
-        -->
-        <!-- Tab links -->
-        <div class="top_nav_external" id="top_nav_external">
-            <a href="https://www.linkedin.com/in/david-chu-51ba7017b/" target="_blank">
-                <img src="static/LinkedIn_logo.PNG" alt="LinkedIn">
-            </a>
-            <a href="https://github.com/thedavidchu/" target="_blank"> 
-                <img src="static/Github_logo.PNG" alt="Github">
-            </a>
-        </div>
+        <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/android-chrome-512x512.png">
 
-        <div class="top_nav_internal" id="top_nav_internal">
-            <a href="index.html#top_nav_bar" onclick="change_title('Home');">Home</a>
-            <a href="index.html#intro" onclick="change_title('Intro');">Intro</a>
-            <a href="index.html#about" onclick="change_title('About');">About</a>
-            <a href="index.html#portfolio" onclick="change_title('Portfolio');">Portfolio</a>
-            <a href="index.html#contact" onclick="change_title('Contact');">Contact</a>
-        </div>
-    </div>
+        <title>David Chu - Main Page</title>
+    </head>
+  
 
-    <div class="content">
-        <!-- ============================== INTRODUCTION ============================== -->
-        <div class="intro" id="intro">
-            <br>
-            <h1>David Chu</h1>
-            <p>Welcome to my website! New updates coming soon...</p>
-            <button onclick="change_title();">Feeling adventurous!</button>
-            <hr>
-        </div>
-
-        <!-- ============================== ABOUT ============================== -->
-        <div class="about" id="about">
-            <h2>About</h2>
-
-            <script type="text/javascript" src="https://platform.linkedin.com/badges/js/profile.js" async defer></script>
-
-            <div class="LI-profile-badge"  data-version="v1" data-size="medium" data-locale="en_US" data-type="horizontal" data-theme="light" data-vanity="thedavidchu"><a class="LI-simple-link" href='https://ca.linkedin.com/in/thedavidchu?trk=profile-badge'>David Chu</a></div>
-
-            <h3>Education</h3>
-            <ul>
-                <li>University of Toronto, Engineering Science, 2022</li>
-                <li>North Toronto Collegiate Institute, 2018</li>
+  <body>
+        <!-- Top Navigation Bar -->
+        <div class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+            <!-- Navigation Bar on the Left -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#Home">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">About</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item font-weight-bold" href="#About">About Me</a>
+                        <a class="dropdown-item" href="#Education">Education</a>
+                        <a class="dropdown-item" href="#Professional">Professional Experience</a>
+                        <a class="dropdown-item" href="#Hobbies">Hobbies</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Portfolio</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item font-weight-bold" href="#Portfolio">Portfolio</a>
+                        <a class="dropdown-item" href="#Coding">Coding</a>
+                        <a class="dropdown-item" href="#Music">Music</a>
+                        <a class="dropdown-item" href="#Other">Other</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#Contact">Contact</a>
+                </li>
             </ul>
 
-            <a href="docs/Resume - 2020-12-16.pdf">Download my CV here!</a>
+            <!-- Navigation Bar on the Right -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="col" href="https://www.linkedin.com/in/thedavidchu/" target="_blank">LinkedIn</a>
+                </li>
+                <li>
+                    <a class="col" href="https://github.com/thedavidchu/" target="_blank">GitHub</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Name Title -->
+        <div id="Home" class="jumbotron fluid-container text-center">
+            <br>
+            <h1>David Chu</h1>
+        </div>
+
+        <!-- About Me -->
+        <div id="About" class="container">
+            <h2 class="text-center">About Me</h2>
+            <h3 id="#Education">Education</h3>
+            <p>My name is David Chu and I am in third-year Machine Intelligence Engineering at the University of Toronto. I am excited by the advances in computer vision and ML architecture.</p>
+            <h3 id=#Professional>Professional Experience</h3>
+            <p>I have experience with numeric computing, full-stack development, and knowledge of low-level computing languages.</p>
+            <h3 id="#Hobbies">My Hobbies</h3>
+            <p>My hobbies include discovering the world on my bike, enjoying the wind and waves through sailing, and exploring music on the piano.</p>
+
+            <div class="row container">
+                <a class="col-sm-1 text-primary" href="docs/Resume - 2020-12-16.pdf" target="_blank">Resume</a>
+                <a class="col-sm-1 text-primary" href="docs/CV - 2020 Dec 11.pdf" target="_blank">CV</a>
+            </div>
             <hr>
         </div>
 
-        <!-- ============================== PORTFOLIO ============================== -->
-        <div class="portfolio" id="portfolio">
-            <h2>Portfolio</h2>
-            <p>We are bringing some spicy projects soon!</p>
-            <a href="games.html">See my Games!</a>
+        <div id="Portfolio" class="container">
+            <h2 class="text-center">Portfolio</h2>
+            <p>Welcome to my portfolio!</p>
+            
         </div>
-    </div>
 
-    <!-- ============================== INTRODUCTION ============================== -->
-    <div class="contact" id="contact">
-        <h2>My Contact</h2>
-        <p>thedavid.chu@mail.utoronto.ca   https://github.com/thedavidchu    https://www.linkedin.com/in/thedavidchu</p>
-        <p></p>
-        <p></p>
-    </div>
+        <div id="Contact" class="jumbotron fluid-container" style="margin-bottom:0">
+            <div class="row">
+                <div class="col">
+                    <h2>Contact</h2>
+                </div>
+                <div class="row ml-auto">
+                    <a class="col" href="to:thedavid.chu@mail.utoronto.ca" target="_blank">Email</a>
+                    <a class="col" href="https://www.linkedin.com/in/thedavidchu/" target="_blank">LinkedIn</a>
+                    <a class="col" href="https://github.com/thedavidchu/" target="_blank">GitHub</a>
+                </div>
+            </div>
+            <div class="text-center align-bottom">
+                <p>Made with &#10084;&#65039; by David Chu, 2020</p>
+            </div>
+            
+        </div>
 
-    <p style="text-align: center;">Made with &#10084;&#65039; by David Chu, 2020</p>
-</body>
+
+
+        <!-- ============================== JAVASCRIPT CODE ============================== -->
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+        <!-- ============================== MY CODE ============================== -->
+        <!-- Change title -->
+        <script src="js/change_title.js"></script>
+    </body>
 </html>
-
-<script src="js/change_title.js"></script>
-
