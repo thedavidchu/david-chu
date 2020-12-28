@@ -113,14 +113,34 @@
 </html>
 
 <script>
-    // // Turn table red on click
-    // $("td").click(function() {
-    //     if($(this).css('background-color') == 'red') { $(this).css('background-color', 'green'); }
-    //     else { $(this).css('background-color', 'red'); }
-    // });
+    $("td").hover(function() {
+        $(this).toggleClass("table-active");
+    });
 
-    // $("td").hover(function() {
-    //     if($(this).css('background-color') == 'red') { $(this).css('background-color', 'green'); }
-    //     else { $(this).css('background-color', 'red'); }
+    // Turn table red on click
+    $("td").click(function() {
+        let class_name = $(this).attr('class');
+        if (class_name.includes("table-warning")) {
+            $(this).toggleClass("table-success");
+            $(this).toggleClass("table-warning");
+            console.log($(this).attr('class'))
+        } else {
+            let id = $(this).attr('id');
+            $(this).toggleClass("table-danger");
+            let legal = board.legal_moves(id);
+            for (let i of legal) {
+                $("#"+i).toggleClass("table-warning");
+            }
+        }
+
+        
+    });
+
+    // $("td").click(function() {
+    //     // If another clicked, move, deselect both
+    //     if 
+
+    //     // If no other clicked, highlight legal squares in green
+
     // });
 </script>

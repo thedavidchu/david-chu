@@ -101,6 +101,7 @@ class Board {
 				if (promotion == null) {console.log('Promoted! Assumed queen'); this.board[j] == 90;}
 				else {this.board[j] == promotion;}
 				return;
+			}
 		} else if (piece == -10) {
 			// En pasant
 			if (32 <= i <= 39 && this.board[j] == 0) {				// Range = [32, 33, 34, 35, 36, 37, 38, 39]
@@ -114,6 +115,7 @@ class Board {
 				if (promotion == null) {console.log('Promoted! Assumed queen'); this.board[j] == -90;}
 				else {this.board[j] == promotion;}
 				return;
+			}
 		}
 		// Move piece
 		this.#raw_move(i, j);
@@ -355,9 +357,11 @@ class Board {
 		let legal = [];
 		let move = null;
 
+		i = parseInt(i)
+
 		switch (piece) {
 			case 0:
-				break;
+				return [];
 			case 10:
 				// Error check if on last row
 				if (i < 8) {return [];}
@@ -435,17 +439,19 @@ class Board {
 		*/
 		let string = "";
 		let letter = {0: '&nbsp', 10: 'P', 30: 'N', 31: 'B', 50: 'R', 90: 'Q', 1000: 'K', "-10": 'p', "-30": 'n', "-31": 'b', "-50": 'r', "-90": 'q', "-1000": 'k'}
+		let k = null;
 		for (let i = 0; i < 8; i++) {
 			string += "<tr>"
 			for (let j = 0; j < 8; j++) {
-				string += "<td>" + letter[this.board[8*i+j]] + "</td>";
+				k = 8*i + j;
+				string += "<td id='"+ k + "'>" + letter[this.board[k]] + "</td>";
 			}
 			string +=  "</tr>";
 		}
 		return string;
 	}
 
-	print(id) {
+	print(id="chess_board") {
 		let element = document.getElementById(id);
 		let string = this.stringify();
 		element.innerHTML = string;
