@@ -10,6 +10,10 @@ board indices =
     [40, 41, 42, 43, 44, 45, 46, 47],
     [48, 49, 50, 51, 52, 53, 54, 55],
     [56, 57, 58, 59, 60, 61, 62, 63]])
+
+## Known bugs
+	1. Castle through check
+	2. Move into check
 */
 
 
@@ -53,20 +57,99 @@ class Board {
 		return true;
 	}
 
-	// ============================== LEGALITY ============================== //
-	#check(player=null, legal=null) {
+	#raw_move(i, j) {
+		/**
+		Move a piece from i to j without any checks.
+		*/
+
+		this.board[j] = this.board[i];
+		this.board[i] = 0;
+	}
+
+	move(i, j, promotion=null) {
+		/**
+		Assume move is legal. Make this private.
+
+		:param i: move from here
+		:param j: move to here
+		:param promotion: what to promot pawn to - NOTE: sign must be correct!
+		*/
+		let piece = this.board[i];
+
+		// Check if castle
+		if (piece == 1000) {						// Range = [R, 57, 58, 59, K, 61, 62, R]
+			if (i == 60) {
+				if (j == 58) {this.#raw_move(56, 59);}
+				else if (j == 62) {this.#raw_move(63, 61);}
+			}
+		} else if (piece == -1000) {				// Range = [ r,  1,  2,  3,  k,  5,  6,  r]
+			if(i == 4) {
+				if (j == 2) {this.#raw_move(0, 3);}
+				else if (j == 6) {this.#raw_move(7, 5);}
+			}
+		// Check en pasant and promotion
+		} else if (piece == 10) {
+			// En pasant
+			if (24 <= i <= 31 && this.board[j] == 0) { 				// Range = [24, 25, 26, 27, 28, 29, 30, 31]
+				if (j - i == -9) {this.board[i-1] = 0;}
+				else if (j - i == -7) {this.board[i+1] = 0;}
+			
+			// Pawn promotion
+			} else if (0 <= j <= 7) {
+				this.#raw_move(i, j);
+				// Promote pawn -- give option
+				if (promotion == null) {console.log('Promoted! Assumed queen'); this.board[j] == 90;}
+				else {this.board[j] == promotion;}
+				return;
+		} else if (piece == -10) {
+			// En pasant
+			if (32 <= i <= 39 && this.board[j] == 0) {				// Range = [32, 33, 34, 35, 36, 37, 38, 39]
+				if (j - i == 7) {this.board[i-1] = 0;}
+				else if (j - i == 9) {this.board[i+1] = 0;}
+			
+			// Pawn promotion
+			} else if (56 <= j <= 63) {
+				this.#raw_move(i, j);
+				// Promote pawn -- give option
+				if (promotion == null) {console.log('Promoted! Assumed queen'); this.board[j] == -90;}
+				else {this.board[j] == promotion;}
+				return;
+		}
+		// Move piece
+		this.#raw_move(i, j);
+	}
+
+	// ============================== CHECK, MATE, AND THREATENING ============================== //
+	#position_threatened(position, player) {
+		/**
+		Returns whether a position is under enemy attack.
+		:param position: position id of interest.
+		:param player: the player who is wondering whether they are being attacked.
+		:return: bool - whether they are under attack.
+		*/
+		let all_legal_obj = this.all_legal_moves(player=-player);
+		let all_legal = [];
+
+		for (let move of all_legal_obj) {all_legal.push(move)};
+		all_legal = all_legal.flat();
+		return all_legal.includes(position);
+	}
+
+	#check(player=null) {
 		/**
 		Check if the player is in check.
+		:param player: player of interest
+			- null: check both players
+		:return: return if the player is in check.
 		*/
 		if (player == null) {
 			// Return true if either player is in check
-			return this.#check(player=1) || this.#check(player=-1);
-		} else if (player == 1) {
-			let all_legal = this.all_legal_moves(player=-player);
+			return this.#check(player=1, legal=legal) || this.#check(player=-1, legal=legal);
+		} else if (player == 1 || player == -1) {
+			let king_id = this.board.indexOf(player * 1000);
+			return this.#position_threatened(king_id, )
 			
-			return null;
-		} else if (player == -1) {
-			return null;
+			return all_legal.includes(kind_id);
 		} else {
 			// ERROR!
 			return false;
@@ -77,6 +160,7 @@ class Board {
 		/**
 		Check if there are any legal moves left.
 		*/
+		
 		return false;
 	}
 
@@ -87,10 +171,18 @@ class Board {
 			1. Check if check
 			2. Check if legal moves to get out of check
 		*/
-		let check = this.#check(player=player);
-		let stale = this.#stale_mate(player=player);
-		return check && stale;
+		// let check = this.#check(player=player);
+		// let stale = this.#stale_mate(player=player);
+		// return check && stale;
+		if (player == null) {return false;}
+		else if (player == 1 || player == -1) {
+			let king_id = this.board.indexOf(player * 1000);
+			if (king_id == -1) {return true;} else {return false;}
+		} else {return false;}		// ERROR!
 	}
+
+	// ============================== LEGAL MOVES ============================== //
+	// Not check if castle through/ move into check. Will have to do this separately
 
 	#on_board(i, move) {
 		/**
@@ -318,19 +410,10 @@ class Board {
 		*/
 		let all_legal = {};
 
-		if (player == 1) {
-			// For all white pieces on board, add to object {position: [legal moves]}
+		if (player == 1 || player == -1) {
+			// For all pieces on board, add to object {position: [legal moves]}
 			for (let i = 0; i < this.board.length; i++) {
-				if (this.board[i] > 0) {
-					all_legal[i] = this.legal_moves(i);
-				}
-			}
-			return all_legal;
-
-		} else if (player == -1) {
-			for (let i = 0; i < this.board.length; i++) {
-				if (this.board[i] < 0) {
-					console.log(typeof(i))
+				if (player == Math.sign(this.board[i])) {
 					all_legal[i] = this.legal_moves(i);
 				}
 			}
@@ -367,12 +450,6 @@ class Board {
 		let string = this.stringify();
 		element.innerHTML = string;
 	}
-// }
-
-
-// class ChessPlayer extends Board {
-
-	
 	
 	// ============================== AI PLAY ============================== //
 	evaluate(player=1) {
@@ -534,5 +611,22 @@ class Board {
 
 		let tally = white - black;
 		return tally * player;
+	}
+
+	simulate(player=null, layers=1) {
+		let possible = [];
+		let sim = null;
+
+		let all_legal = this.all_legal_moves(player=player)
+
+		for (let a in all_legal) {
+			for (let b in all_legal[a]) {
+				sim = new board(this.board);
+				sim.get_move(a, b);
+				possible.push()
+			}
+		}
+
+
 	}
 }
