@@ -126,6 +126,12 @@
         - 
     */
 
+    function check_turn(hover) {
+        let i = parseInt(hover.attr('id'));
+
+        return board.turn == Math.sign(board.board[i]);
+    }
+
     $(document).ready(function() {
         // Hover on chess board
         $("td").hover(function() {
@@ -167,10 +173,16 @@
                 let a = parseInt($(".table-danger").attr("id"));
                 let b = parseInt($(this).attr("id"));
                 board.get_move(a, b);
-                $("td").removeClass("table-danger table-warning table-success table-active");
+                $("td").removeClass("table-danger table-warning table-success table-active table-info");
                 $(this).addClass("table-active");
                 board.print();
                 board.check_win();
+
+                // Change board colours
+                console.log("#" + a + "-chess");
+                $("#" + a + "-chess").addClass("table-info");
+                $("#" + b + "-chess").addClass("table-info");
+
             } else {
                 // If piece, select
                 if ($(this).html() != "&nbsp;") {

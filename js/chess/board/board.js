@@ -80,26 +80,20 @@ class Board {
 		if (this.board[i] == 0) {return false;}
 		// 2. Check if legal move
 		let legal = this.#legal_moves(i);
-		console.log(this.board[j]);
 		if (!legal.includes(j)) {return false;}
 		
 		// Pawn promotion
-		console.log("here",(this.board[i] == 10 && 0 <= j && j <= 7), (this.board[i] == -10 && 56 <= j && j <= 63))
-		console.log(this.board[j], j)
 		let promotion = null;
 		if ((this.board[i] == 10 && 0 <= j && j <= 7) || (this.board[i] == -10 && 56 <= j && j <= 63)) {
 			// Pawn promotion
-			console.log('here 1')
 			while (true){
 				let temp = prompt("Promote to Queen (Q/q), Rook (R/r), Bishop (B/b), or Knight (N/n)?", "Q").toLowerCase();
 				let dict = {queen: 90, rook: 50, bishop: 31, knight: 30, q: 90, r: 50, b: 31, n: 30, k: 30}
 				if (["queen", "rook", "bishop", "knight", 'q', 'r', 'b', 'n', 'k'].includes(temp)) {
 					promotion = dict[temp] * Math.sign(this.board[i]);
-					console.log(promotion);
 					break;
 				}
 			}
-			console.log('here 2')
 		}
 		this.#move(i, j, promotion);
 		return true;
