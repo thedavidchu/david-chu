@@ -112,6 +112,11 @@
 <script>
     /**
     Note: this only allows for 1 board.
+
+    ## TODO
+        - Hover to show legal moves
+        - Make checkerboard
+        - 
     */
 
     $(document).ready(function() {
@@ -126,7 +131,7 @@
             } else if (class_name.includes("table-danger")) {
                 // pass
             } else if (class_name.includes("table-warning")) {
-                $(this).removeClass();
+                $(this).removeClass("table-danger table-warning table-success table-active");
                 $(this).addClass("table-success");
             } else {
                 // pass   
@@ -148,31 +153,31 @@
             let class_name = $(this).attr("class");
             // Deselect selected piece
             if (class_name.includes("table-danger")) {
-                $("td").removeClass();
+                $("td").removeClass("table-danger table-warning table-success table-active");
                 $(this).addClass("table-active");
             // Choose piece move
             } else if (class_name.includes("table-success")) {      // NOTE: table-warning has priority over table-success, so I actually removed the table-warning class
                 let a = parseInt($(".table-danger").attr("id"));
                 let b = parseInt($(this).attr("id"));
-                board.move(a, b);
-                $("td").removeClass();
+                board.get_move(a, b);
+                $("td").removeClass("table-danger table-warning table-success table-active");
                 $(this).addClass("table-active");
                 board.print();
                 board.check_win();
             } else {
                 // If piece, select
                 if ($(this).html() != "&nbsp;") {
-                    $("td").removeClass();
+                    $("td").removeClass("table-danger table-warning table-success table-active");
                     $(this).addClass("table-active");
                     $(this).addClass("table-danger");
                     let id = parseInt($(this).attr("id"));
-                    let legal = board.legal_moves(id);
+                    let legal = board.get_legal_moves(id);
                     for (let i of legal) {
                         $("#"+i+"-chess").toggleClass("table-warning");
                     }
                 // If not piece, deselect
                 } else {
-                    $("td").removeClass();
+                    $("td").removeClass("table-danger table-warning table-success table-active");
                     $(this).addClass("table-active");
                 }
                 
