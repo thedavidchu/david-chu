@@ -14,14 +14,29 @@ board indices =
 ## Known bugs
 	1. Castle through check
 	2. Move into check
+
+## TODO
+	1. Change piece weights to real value (i.e. 100 = pawn, etc.)
 */
 
 
 class Board {
-	constructor(array=null) {
+	constructor(array=null, prev_move=null, turn=null, castle=null) {
+		/**
+		Construct the board.
+
+		If all nulls, we initialize the board to the start of the game.
+
+		:param array: array (64,) - array of the chess board. Change name to "board".
+		:param prev_move: array (2,) - tuple of [previous start, previous finish].
+		:param turn: int - tells which player's turn it is (+1 or -1).
+		:param castle: array (4,) - tells which castles are legal.
+		*/
+
 		this.board = [];
-		this.prev_move = [null, null];
-		this.turn = 1;
+		if (prev_move == null) {this.prev_move = [null, null];} 
+		else {this.prev_move = [prev_i, prev_j];}
+		this.turn = turn;
 		this.castle = [true, true, true, true];		// [black left castle, black right castle, white left castle, white right castle], from white's perspective
 
 		if (array == null) {
@@ -513,6 +528,9 @@ class Board {
 		Evaluate the value of pieces on the board.
 
 		Note: Bishop is worth 301 centipawns, while knight is worth 300.
+
+		:param player: int - player +1 or -1
+		:return: int - value of board with respect to the player (i.e. higher is better for that player).
 		*/
 		let white=0;
 		let black=0;
@@ -672,20 +690,53 @@ class Board {
 	simulate(player=null, layers=1) {
 		/**
 		Simulate 1 layer for now.
+		{[a, b]: [evaluation, [{}, {}, ..., {}] ], [a2, b2]: [evaluation2, [{}, {}, ..., {}] ]}
+
+		:param player:
+		:param layers:
 		*/
 		let possible = [];
 		let sim = null;
+		let promotion_pieces = [90, 50, 31, 30];
 
-		let all_legal = this.all_legal_moves(player=player)
+		if (player != null) {
+			let all_legal = this.all_legal_moves(player=player);
+		} else {
+			let all_legal = this.all_legal_moves(player=this.turn);
+		}
 
-		for (let a in all_legal) {
-			for (let b in all_legal[a]) {
-				sim = new board(this.board);
-				sim.get_move(a, b);
-				possible.push()
+		// While there are more layers to search
+		if (layers) {
+			// Check each piece
+			for (let a in all_legal) {
+				// Check each legal move for that piece
+				for (let b of all_legal[a]) {
+					if (this.board[a] == 10 && 0 <= b && b <= 7) {
+						// Check all white pawn promotion
+						for (let c of promotion_pieces) {
+							sim = new board(this.board, this.prev_move, this.turn, this.castle);
+							sim.get_move(a, b, promotion=c);
+							possible.push(sim.simulate(-player, layers--));
+						}
+					} else if (this.board[a] == -10 && 56 <= b && b <= 63) {
+						// Check all black pawn promotion
+						for (let c of promotion_pieces) {
+							sim = new board(this.board, this.prev_move, this.turn, this.castle);
+							sim.get_move(a, b, promotion=-c);
+							possible.push(sim.simulate(-player, layers--));
+						}
+					} else {
+						// Moves
+						sim = new board(this.board, this.prev_move, this.turn, this.castle);
+						sim.get_move(a, b);
+						possible.push(sim.simulate(-player, layers--));
+					}
+					
+				}
 			}
 		}
 
+		return possible;
 
 	}
 }
