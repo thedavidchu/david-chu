@@ -42,7 +42,6 @@ class Board {
 							 0,   0,   0,   0,     0,   0,   0,   0,
 							10,  10,  10,  10,    10,  10,  10,  10,
 							50,  30,  31,  90,  1000,  31,  30,  50,];
-			this.board = [-50, -30, -31, -90, -1000, -31, -30, -50, -10, -10, -10, -10, 0, -10, 31, -10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, -10, 10, 10, 10, 50, 30, 0, 90, 1000, 31, 30, 50];
 		}
 		else {this.board = Array.from(array);}
 
@@ -904,14 +903,14 @@ class Board {
 		return best_move;
 	}
 
-	naive_play_game(loop=false) {
+	naive_play_game(layers=4, loop=false) {
 		let best_move = null;
 		let i = null, j = null, k = null;
 
 		do {
 			// {Take a turn
 			if (!this.check_win()) {
-				best_move = this.#naive_best_move(this.turn, 4);
+				best_move = this.#naive_best_move(this.turn, layers);
 				i = best_move[0][0];
 				j = best_move[0][1];
 				k = best_move[0][2];
