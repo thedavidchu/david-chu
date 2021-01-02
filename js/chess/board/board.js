@@ -168,10 +168,10 @@ class Board {
 		*/
 		if (player == null) {
 			// Return true if either player is in check
-			return this.#check(player=1, legal=legal) || this.#check(player=-1, legal=legal);
+			return this.#check(player=1) || this.#check(player=-1);
 		} else if (player == 1 || player == -1) {
 			let king_id = this.board.indexOf(player * 1000);
-			return this.#position_threatened(king_id, )
+			return this.#position_threatened(king_id, player)
 			
 			return all_legal.includes(kind_id);
 		} else {
