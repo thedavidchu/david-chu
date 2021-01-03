@@ -76,7 +76,9 @@
          <div id="Chess" class="container">
             <hr>
             <h2 class="text-center">Chess</h2>
-            <p>Welcome to my Chess Game!</p>
+            <p>Welcome to my Chess Game! I believe the 4 layer deep AI may have an ELO rating of at least 600, since I beat a chess.com AI with an ELO of 600 pretty easily in a one-out-of-one series. In other words, I tested it on one game against a chess AI with an ELO of 600.</p>
+
+            <p>Use the 5 Layer button at your own discretion. It lags out my computer completely.</p>
             <hr>
 
             <table class= "table table-bordered">
@@ -91,12 +93,22 @@
                 board.init_print("chess_board");
             </script>
 
-
+            <!-- Alpha-beta pruning -->
             <div class="btn-group">
-                <button id="play_game1" type="button" class="btn btn-primary">1 Layer</button>
-                <button id="play_game2" type="button" class="btn btn-primary">2 Layers</button>
-                <button id="play_game3" type="button" class="btn btn-primary">3 Layers</button>
-                <button id="play_game4" type="button" class="btn btn-primary">4 Layers</button>
+                <button id="play_game1" type="button" class="btn btn-primary" onclick="board.play_game(1);">1 Layer</button>
+                <button id="play_game2" type="button" class="btn btn-primary" onclick="board.play_game(2);">2 Layers</button>
+                <button id="play_game3" type="button" class="btn btn-primary" onclick="board.play_game(3);">3 Layers</button>
+                <button id="play_game4" type="button" class="btn btn-warning" onclick="board.play_game(4);">4 Layers</button>
+                <button id="play_game5" type="button" class="btn btn-danger" onclick="board.play_game(5);">5 Layers</button>
+            </div>
+
+            <!-- Naive minmax tree -->
+            <div class="btn-group">
+                <button id="naive_play_game1" type="button" class="btn btn-primary" onclick="board.naive_play_game(1);">Naive 1 Layer</button>
+                <button id="naive_play_game2" type="button" class="btn btn-primary" onclick="board.naive_play_game(2);">Naive 2 Layers</button>
+                <button id="naive_play_game3" type="button" class="btn btn-primary" onclick="board.naive_play_game(3);">Naive 3 Layers</button>
+                <button id="naive_play_game4" type="button" class="btn btn-warning" onclick="board.naive_play_game(4);">Naive 4 Layers</button>
+                <button id="naive_play_game5" type="button" class="btn btn-danger" onclick="board.naive_play_game(5);">Naive 5 Layers</button>
             </div>
             
         </div>
@@ -119,11 +131,6 @@
 <script>
     /**
     Note: this only allows for 1 board.
-
-    ## TODO
-        - Hover to show legal moves
-        - Make checkerboard
-        - 
     */
 
     function check_turn(hover) {
@@ -179,13 +186,12 @@
                 board.check_win();
 
                 // Change board colours
-                console.log("#" + a + "-chess");
                 $("#" + a + "-chess").addClass("table-info");
                 $("#" + b + "-chess").addClass("table-info");
 
             } else {
                 // If piece, select
-                if ($(this).html() != "&nbsp;") {
+                if ($(this).html() != "&nbsp;" && check_turn($(this))) {
                     $("td").removeClass("table-danger table-warning table-success table-active");
                     $(this).addClass("table-active");
                     $(this).addClass("table-danger");
@@ -205,16 +211,19 @@
 
         // Clicking on button - four layer deep search
         $("#play_game1").click(function() {
-            board.naive_play_game(1);
+            board.play_game(1);
         });
         $("#play_game2").click(function() {
-            board.naive_play_game(2);
+            board.play_game(2);
         });
         $("#play_game3").click(function() {
-            board.naive_play_game(3);
+            board.play_game(3);
         });
         $("#play_game4").click(function() {
-            board.naive_play_game(4);
+            board.play_game(4);
+        });
+        $("#play_game4").click(function() {
+            board.play_game(5);
         });
     });
     

@@ -70,6 +70,7 @@ class Board {
 		:param j: move to here
 		:return: bool - whether legal move or not
 		*/
+		'use strict';
 
 		// Check whose turn
 		if (Math.sign(this.board[i]) == this.turn) {
@@ -79,7 +80,7 @@ class Board {
 		// 1. Check if there is a piece at i
 		if (this.board[i] == 0) {return false;}
 		// 2. Check if legal move
-		let legal = this.#legal_moves(i);
+		let legal = this.#legal_moves(i, true);
 		if (!legal.includes(j)) {return false;}
 		
 		// Pawn promotion
@@ -109,11 +110,13 @@ class Board {
 		:return: none
 		*/
 
+		'use strict';
+
 		this.board[j] = this.board[i];
 		this.board[i] = 0;
 	}
 
-	#move(i, j, promotion=null) {
+	#move(i, j, promotion) {
 		/**
 		Assume move is legal. Make this private.
 
@@ -123,6 +126,8 @@ class Board {
 
 		:return: none
 		*/
+
+		'use strict';
 		let piece = this.board[i];
 		this.prev_move = [i, j];
 		this.turn *= -1;
@@ -202,6 +207,8 @@ class Board {
 		:param player: the player who is wondering whether they are being attacked.
 		:return: bool - whether they are under attack.
 		*/
+		'use strict';
+
 		let all_legal_obj = this.#all_legal_moves(-player, false);
 		let all_legal = [];
 
@@ -218,16 +225,18 @@ class Board {
 		}
 	}
 
-	#check(player=null) {
+	#check(player) {
 		/**
 		Check if the player is in check.
 		:param player: player of interest
 			- null: check both players
 		:return: return if the player is in check.
 		*/
+
+		'use strict';
 		if (player == null) {
 			// Return true if either player is in check
-			return this.#check(player=1) || this.#check(player=-1);
+			return this.#check(1) || this.#check(-1);
 		} else if (player == 1 || player == -1) {
 			let king_id = this.board.indexOf(player * 1000);
 			return this.#position_threatened(king_id, player)
@@ -239,24 +248,32 @@ class Board {
 		}
 	}
 
-	#stale_mate(player=null) {
+	#stale_mate(player) {
 		/**
 		Check if there are any legal moves left.
+
+		NOT IMPLEMENTED
 		*/
+		'use strict';
 		
 		return false;
 	}
 
-	#check_mate(player=null) {
+	#check_mate(player) {
 		/**
 		Check if there is a check mate.
 		Steps:
 			1. Check if check
 			2. Check if legal moves to get out of check
+
+		NOT IMPLEMENTED
 		*/
 		// let check = this.#check(player=player);
 		// let stale = this.#stale_mate(player=player);
 		// return check && stale;
+
+		'use strict';
+
 		if (player == null) {return false;}
 		else if (player == 1 || player == -1) {
 			let king_id = this.board.indexOf(player * 1000);
@@ -272,6 +289,7 @@ class Board {
 			- True if win
 			- False if no win
 		*/
+		'use strict';
 		let white = false, black = false;
 		for (let i = 0; i < this.board.length; i++) {
 			if (this.board[i] == 1000) {white = true;}
@@ -312,6 +330,8 @@ class Board {
 		:param i: current position
 		:param move: proposed move
 		*/
+
+		'use strict';
 
 		switch (move) {
 			// Knight
@@ -365,6 +385,8 @@ class Board {
 
 		:param i: current position index
 		*/
+
+		'use strict';
 
 		// Error Check
 		if (i < 0) {
@@ -472,6 +494,9 @@ class Board {
 		:param i: position of interest.
 		:return: array - legal moves.
 		*/
+
+		'use strict';
+
 		if (Math.sign(this.board[i]) == this.turn) {
 			return this.#legal_moves(i, true);
 		} else {
@@ -479,7 +504,7 @@ class Board {
 		}
 	}
 
-	#legal_moves(i, check_castle=false) {
+	#legal_moves(i, check_castle) {
 		/**
 		Get legal moves for the piece on square i, regardless of check.
 
@@ -492,6 +517,8 @@ class Board {
 		:param i: index of piece
 		:return: array - legal moves.
 		*/
+
+		'use strict';
 
 		let piece = this.board[i];
 		let player = Math.sign(piece);
@@ -547,13 +574,16 @@ class Board {
 		}
 	}
 
-	#all_legal_moves(player=null, check_castle=false) {
+	#all_legal_moves(player, check_castle) {
 		/**
 		Add all legal moves for a given player.
 
 		:param player: which player to check
 		:param check_castle: whether to check for castling ability.
 		*/
+
+		'use strict';
+
 		let all_legal = {};
 
 		if (player == 1 || player == -1) {
@@ -566,7 +596,7 @@ class Board {
 			return all_legal;
 
 		} else if (player == null) {
-			return [this.#all_legal_moves(player=1, check_castle), this.#all_legal_moves(player=-1, check_castle)]
+			return [this.#all_legal_moves(1, check_castle), this.#all_legal_moves(-1, check_castle)]
 		} else {
 			return {};
 		}
@@ -579,6 +609,9 @@ class Board {
 		/**
 		Stringify this.board into HTML table.
 		*/
+
+		'use strict';
+
 		let string = "";
 		let letter = {0: '&nbsp;', 10: 'P', 30: 'N', 31: 'B', 50: 'R', 90: 'Q', 1000: 'K', "-10": '<b>p</b>', "-30": '<b>n</b>', "-31": '<b>b</b>', "-50": '<b>r</b>', "-90": '<b>q</b>', "-1000": '<b>k</b>'};
 		let k = null;
@@ -600,12 +633,18 @@ class Board {
 	}
 
 	init_print(id="chess_board") {
+		/**
+		Set up initial chess board.
+		*/
 		let element = document.getElementById(id);
 		let string = this.#init_stringify();
 		element.innerHTML = string;
 	}
 
 	print(id="chess_board") {
+		/**
+		Update chess board.
+		*/
 		let element = null;
 		let letter = {0: '&nbsp;', 10: 'P', 30: 'N', 31: 'B', 50: 'R', 90: 'Q', 1000: 'K', "-10": '<b>p</b>', "-30": '<b>n</b>', "-31": '<b>b</b>', "-50": '<b>r</b>', "-90": '<b>q</b>', "-1000": '<b>k</b>'};
 		for (let i = 0; i < this.board.length; i++) {
@@ -615,15 +654,16 @@ class Board {
 	}
 	
 	// ============================== AI PLAY ============================== //
-	#evaluate(player=1) {
+	#evaluate() {
 		/**
 		Evaluate the value of pieces on the board.
 
 		Note: Bishop is worth 301 centipawns, while knight is worth 300.
 
-		:param player: int - player +1 or -1
 		:return: int - value of board with respect to the player (i.e. higher is better for that player).
 		*/
+		'use strict';
+
 		let white=0;
 		let black=0;
 
@@ -776,10 +816,10 @@ class Board {
 		}
 
 		let tally = white - black;
-		return tally * player;
+		return tally;
 	}
 
-	#simulate(player=null, layers=1) {
+	#simulate(player, layers) {
 		/**
 		Simulate 1 layer for now.
 		
@@ -794,6 +834,8 @@ class Board {
 		:param player: int - player (+1 or -1).
 		:param layers: int - number of layers to iterate through.
 		*/
+		'use strict';
+
 		let possible = [];
 		let sim = null;
 		let promotion_pieces = [90, 50, 31, 30];
@@ -845,6 +887,8 @@ class Board {
 		:param possible:
 			- [[[a, b, c], evaluation, [all possible moves]], [...], ...]
 		*/
+		'use strict';
+
 		if (possible.length == 0) {
 			return;
 		} else {
@@ -883,35 +927,145 @@ class Board {
 		}
 	}
 
-	#naive_best_move(player=null, layers=1){
+	#naive_best_move(player, layers){
+		'use strict';
 		let turn = null;
 		
 		// Check player
 		if (player != null) {turn = player;}
 		else {turn = this.turn;}
 
-		let possible = this.#simulate(turn, layers=layers);
+		let possible = this.#simulate(turn, layers);
 		let best_move = this.#naive_best_move_help(turn, possible);
 
 		console.log(best_move);
 		return best_move;
 	}
 
-	naive_play_game(layers=4, loop=false) {
+	naive_play_game(layers) {
+		'use strict';
 		let best_move = null;
 		let i = null, j = null, k = null;
 
-		do {
-			// {Take a turn
-			if (!this.check_win()) {
-				best_move = this.#naive_best_move(this.turn, layers);
-				i = best_move[0][0];
-				j = best_move[0][1];
-				k = best_move[0][2];
-	
-				this.#move(i, j, k);
-				this.print();
+		// {Take a turn
+		if (!this.check_win()) {
+			best_move = this.#naive_best_move(this.turn, layers);
+			i = best_move[0][0];
+			j = best_move[0][1];
+			k = best_move[0][2];
+
+			this.#move(i, j, k);
+			this.print();
+
+			$("td").removeClass("table-info");
+
+			$("#"+i+"-chess").addClass("table-info");
+			$("#"+j+"-chess").addClass("table-info");
+		}
+	}
+
+	#legal_triple() {
+		/**
+		Convert legal moves to [hence, hither, promotion].
+		:return: [[a, b, c], ...]
+		*/
+		'use strict';
+
+		let all_legal_obj = this.#all_legal_moves(this.turn, true);
+		let promotion_pieces = [90, 50, 31, 30];
+		let triple = [];
+		for (let a in all_legal_obj) {
+			a = parseInt(a);
+			for (let b of all_legal_obj[a]) {
+				// Check all white pawn promotion
+				if (this.board[a] == 10 && 0 <= b && b <= 7) {
+					for (let c of promotion_pieces) {triple.push([a, b, c]);}
+				// Check all black pawn promotion
+				} else if (this.board[a] == -10 && 56 <= b && b <= 63) {
+					for (let c of promotion_pieces) {triple.push([a, b, -c]);}
+				// No promotion
+				} else {triple.push([a, b, null]);}
 			}
-		} while (loop);
+		}
+		return triple;
+	}
+
+	#alpha_beta(layers, alpha, beta, player) {
+		/**
+		Call alpha-beta pruned tree.
+
+		Initial call: alpha_beta(origin, depth, -Infinity, +Infinity, 1)
+
+		:param board: board that we want
+		:param layers:
+		:param alpha:
+		:param beta:
+		:param player:
+		*/
+
+		'use strict';
+		let legal = this.#legal_triple();
+
+		if (layers <= 0 || Object.keys(legal).length == 0) {
+			return [null, this.#evaluate()];
+		} else if (player == 1) {
+			let value = [null, -Infinity];
+			for (let i = 0; i < legal.length; i++) {
+				let child = new Board(this.board, this.prev_move, this.turn, this.castle);
+				child.#move(...legal[i]);
+				// Find max
+				let prune = child.#alpha_beta(layers-1, alpha, beta, -1);
+				if (prune[1] > value[1]) {
+					value = prune;
+				}
+				// Find alpha
+				alpha = Math.max(alpha, value[1]);
+				if (alpha >= beta) {break;}
+			}
+			return value;
+		} else if (player == -1) {
+			let value = [null, +Infinity];
+			for (let i = 0; i < legal.length; i++) {
+				let child = new Board(this.board, this.prev_move, this.turn, this.castle);
+				child.#move(...legal[i]);
+				// Find min
+				let prune = child.#alpha_beta(layers-1, alpha, beta, +1);
+				if (prune[1] < value[1]) {
+					value = prune;
+				}
+				// Find beta
+				beta = Math.min(beta, value[1]);
+				if (beta <= alpha) {break;}
+			}
+			return value;
+		}
+	}
+
+	play_game(layers) {
+		/**
+		Play game using alpha-beta pruning.
+		*/
+		'use strict';
+		let best_move = this.#alpha_beta(layers, -Infinity, +Infinity, this.turn);
+		let i = null, j = null, k = null;
+
+		// {Take a turn
+		if (!this.check_win()) {
+			best_move = this.#naive_best_move(this.turn, layers);
+			i = best_move[0][0];
+			j = best_move[0][1];
+			k = best_move[0][2];
+
+			this.#move(i, j, k);
+			this.print();
+
+			$("td").removeClass("table-info");
+
+			$("#"+i+"-chess").addClass("table-info");
+			$("#"+j+"-chess").addClass("table-info");
+		}
 	}
 }
+/*
+
+*/
