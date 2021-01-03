@@ -376,7 +376,7 @@ class ChessBoard {
 			case -6:
 				if (i < 8) {return false;} else if (i % 8 > 5) {return false;} else {return true;}
 			case 6:
-				if (i > 55) {return false;} else if (i % 8 < 3) {return false;} else {return true;}
+				if (i > 55) {return false;} else if (i % 8 < 2) {return false;} else {return true;}
 			case 10:
 				if (i > 55) {return false;} else if (i % 8 > 5) {return false;} else {return true;}
 			case 15:
