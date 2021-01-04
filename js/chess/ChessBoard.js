@@ -313,6 +313,28 @@ class ChessBoard {
 		} else {return false;}		// ERROR!
 	}
 
+	#check_end_game() {
+		/**
+		Return true when a king is captured.
+
+		Is it faster to:
+			a. Check for both winning 
+
+		:return:
+			- true if win
+			- false if no win.
+		*/
+
+		'use strict';
+
+		let white = false, black = false;
+		for (let i = 0; i < this.board.length; i++) {
+			if (this.board[i] == 1000) {white = true; if (black) {return false;}}
+			else if (this.board[i] == -1000) {black = true; if (white) {return false;}}
+		}
+		return true;
+	}
+
 	check_win() {
 		/**
 		Halt play once a king has been captured.
@@ -1061,9 +1083,12 @@ class ChessBoard {
 
 		'use strict';
 
-		let legal = this.#legal_triple();
+		// End search if the bottom layer or the game has finished
+		if (layers <= 0 || this.#check_end_game()) {return [null, this.#evaluate()];}
 
-		if (layers <= 0 || legal.length == 0) {
+		// End search if no legal moves
+		let legal = this.#legal_triple();
+		if (legal.length == 0) {
 			return [null, this.#evaluate()];
 		} else if (player == 1) {
 			let value = [null, -Infinity];
