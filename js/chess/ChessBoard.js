@@ -22,13 +22,13 @@ board indices =
 	[56, 57, 58, 59, 60, 61, 62, 63]])
 
 ## Known bugs
-	1. Allows you to put yourself/ leave yourself in check
-	2. Game doesn't end with 3 repeated moves/ checkmate/ stalemate (goes until King capture)
+	1. Game doesn't end with 3 repeated moves/ checkmate/ stalemate (goes until King capture)
+	2. Gives notification of win/ draw before it updates board.
+	3. The AI can't checkmate itself!!!
+	4. If choose illegal move due to check, it will still turn squares blue as if you have moved.
 
 ## TODO
 	1. Change piece weights to real value (i.e. 100 = pawn, etc.)
-	2. Revise so you can't put/leave yourself in check
-	3. Do stalemate
 
 ## Development Plans
 	I finished this on January 2, 2021. I think I am going to freeze the code; I am not exactly a chess afficionado, so this is just purely for the fun of it.
@@ -143,17 +143,19 @@ class ChessBoard {
 
 		'use strict';
 
-		let turn = this.turn;
-
 		// 0. Check whose turn
-		if (Math.sign(this.board[i]) != turn) {return false;}
-
+		if (Math.sign(this.board[i]) != this.turn) {return false;}
 		// 1. Check if there is a piece at i
 		else if (this.board[i] == 0) {return false;}
 		
 		// 2. Check if legal move
 		let legal = this.#legal_moves(i, true);
 		if (!legal.includes(j)) {return false;}
+
+		// Check if you put yourself into check!
+		let child = new ChessBoard(this.board, this.prev_move, this.turn, this.castle);
+		child.#move(i, j, null);
+		if (child.#is_check(this.turn)) {return false;}
 		
 		// Pawn promotion
 		let promotion = null;
@@ -169,15 +171,17 @@ class ChessBoard {
 			}
 		}
 		this.#move(i, j, promotion);
+		this.update_board();					// Need id?
 
-		// Check mate
-		let mate = this.#is_mate(turn);
-		console.log(mate);
+		// Check for mate
+		let mate = this.#is_mate(this.turn);	// Check for opponent
 		switch (mate) {
 			case 'checkmate':
-				this.end_board(turn);
+				this.end_board(-this.turn);
+				break;
 			case 'stalemate':
 				this.end_board(0);
+				break;
 			case 'check':
 				return true;
 			case 'none':
@@ -372,8 +376,6 @@ class ChessBoard {
 		// Return true if all positions result in check
 		return true;
 	}
-
-	test(player) {return this.#is_check_next_move(player);}
 
 	// DO NOT USE - INEFFICIENT
 	#is_stalemate(player) {
@@ -901,19 +903,20 @@ class ChessBoard {
 
 		switch (winner) {
 			case 1:
+				this.setup_board();
 				alert('Checkmate! White has won!');
-				break;
+				return;
 			case -1:
+				this.setup_board();
 				alert('Checkmate! Black has won!');
-				break;
+				return;
 			case 0:
+				this.setup_board();
 				alert("Stalemate! It's a draw!");
-				break;
+				return;
 			default:
 				return;
 		}
-		this.setup_board();
-		return;
 	}
 	
 	// ============================== AI PLAY ============================== //
@@ -1252,6 +1255,23 @@ class ChessBoard {
 
 			this.#move(...best_move[0]);
 			this.update_board();
+
+			// Check for mate
+			let mate = this.#is_mate(this.turn);	// Check for opponent
+			switch (mate) {
+				case 'checkmate':
+					this.end_board(-this.turn);
+					break;
+				case 'stalemate':
+					this.end_board(0);
+					break;
+				case 'check':
+					break;
+				case 'none':
+					break;
+				default:
+					break;
+			}
 
 			$("td").removeClass("table-info");
 

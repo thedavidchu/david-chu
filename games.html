@@ -202,8 +202,6 @@
                 board.get_move(a, b);
                 $("td").removeClass("table-danger table-warning table-success table-active table-info");
                 $(this).addClass("table-active");
-                board.update_board();
-                board.get_king_captured();
 
                 // Change board colours
                 $("#" + a + "-chess").addClass("table-info");
