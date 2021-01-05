@@ -13,33 +13,33 @@
 }
 
 .chess-moved {
-    background-color: mediumseagreen;
+    background-color: lightgreen;
 }
 
 .chess-passive-hover {
     /* Bootstrap -active??? */
-    background-color: lightgray;
+    /*background-color: lightgray;*/
 }
 
 .chess-active-hover {
     /* Bootstrap -info (~teal) */
-    background-color: lightblue;
+    background-color: lightcyan;
 }
 
 .chess-active {
-    background-color: lightskyblue;
+    background-color: lightsteelblue;
 }
 
 .chess-legal {
-    background-color: lemonchiffon;
+    background-color: powderblue;
 }
 
 .chess-attacked {
-    background-color: red;
+    background-color: indianred;
 }
 
 .chess-legal-hover {
-    background-color: lightgreen;
+    background-color: seagreen;
 }
 
 

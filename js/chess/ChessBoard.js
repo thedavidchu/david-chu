@@ -26,7 +26,6 @@ board indices =
 	2. Gives notification of win/ draw before it updates board.
 	3. The AI can't checkmate itself!!!
 	4. If choose illegal move due to check, it will still turn squares blue as if you have moved.
-	5. Highlights moves
 
 ## TODO
 	1. Change piece weights to real value (i.e. 100 = pawn, etc.)
