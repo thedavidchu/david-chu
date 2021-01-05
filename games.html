@@ -5,6 +5,9 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+        <!-- Custom Stylesheet -->
+        <link rel="stylesheet" href="static/stylesheet.css">
+
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -152,8 +155,6 @@
         <!-- ============================== MY CODE ============================== -->
         <!-- Change title -->
         <script src="js/change_title.js"></script>
-        <link rel="stylesheet" href="static/stylesheet.css">
-        <!-- <script src="js/chess/board/board.js"></script> -->
     </body>
 </html>
 
@@ -211,8 +212,18 @@
         let id = parseInt(hic.attr("id"));
         let legal = board.get_legal_moves(id);
 
+        function is_en_passant(piece, start, finish, board) {
+            /**
+            If it is a pawn move diagonally, it is a capture no matter what.
+            */
+            let move = Math.abs(finish - start);
+
+            if (Math.abs(piece) == 10 && (move == 7 || move == 9)) {return true;}
+            else {return false;}
+        }
+
         for (let i of legal) {
-            if (Math.sign(board.board[i]) == -Math.sign(board.board[id])) {
+            if (Math.sign(board.board[i]) == -Math.sign(board.board[id]) || is_en_passant(board.board[id], id, i, board)) {
                 $("#"+i+"-chess").addClass("chess-legal chess-attacked");
             } else {
                 $("#"+i+"-chess").addClass("chess-legal");
@@ -288,12 +299,12 @@
                 
                 board.get_move(a, b);
                 
-                $("td").removeClass("chess-active chess-legal chess-legal-hover chess-active-hover chess-attacked chess-moved border-danger");
+                $("td").removeClass("chess-active chess-legal chess-legal-hover chess-active-hover chess-attacked chess-moved");
                 $(this).addClass("chess-passive-hover");
 
                 // Change board colours
-                $("#" + a + "-chess").addClass("chess-moved border-danger");
-                $("#" + b + "-chess").addClass("chess-moved border-danger");
+                $("#" + a + "-chess").addClass("chess-moved");
+                $("#" + b + "-chess").addClass("chess-moved");
             } else {
                 // Unselect options
                 remove_selection();

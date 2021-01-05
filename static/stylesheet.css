@@ -15,7 +15,7 @@ $darkpaleblue:
 
 .chess-moved {
     /* border-color: #b8e8b8; */   /* light, pale green */
-    border-width: 21px;
+    background-color: #c3e6cb;
 }
 
 .chess-passive-hover {
