@@ -94,8 +94,8 @@
                 <li class="list-group-item"><b>Use the 5 Layer button at your own discretion. It lags out my computer completely.  Assuming that there are 30 possible moves at any given board position, it takes ~30 times longer to compute 5 layers (24`300`000 possibilities) than it does to compute 4 (810`000 possibilities). Moreover, due to finite memory, your stack may overflow.</b></li>
                 <li class="list-group-item"><b>There may be bugs. If you are trying to discretely win a chess tournament, please do not use this engine unless you want to risk losing. If you find a bug, please let me know!</b></li>
                 <li class="list-group-item"><b>The game does not end in checkmate. It ends in king capture.</b></li>
-                <li class="list-group-item"><b>The AI is deterministic. I have not introduced random chance into it, so you can memorize a sequence of moves to defeat it.</b></li>
-                <li class="list-group-item"><b></b></li>
+                <li class="list-group-item"><b>The AI is not necessarily deterministic. I have added randomness to it; however you can switch this randomness off.</b></li>
+                <li class="list-group-item"><b>There is weird behaviour when it plays itself. I played white (3-layer AI) vs black (4-layer AI). Black won, but after making a series of blunders that gutted it of its bishops and a knight. Also, black forked white's rook and king. Guess whom white decided to save... Yeah, you guessed it. It moved the rook to put black's king in check. This meant that it considered trading kings a good move.</b></li>
             </ul>
             
             
@@ -211,7 +211,7 @@
                 $("td").removeClass("table-danger table-warning table-success table-active table-info");
                 $(this).addClass("table-active");
                 board.update_board();
-                board.check_win();
+                board.get_king_captured();
 
                 // Change board colours
                 $("#" + a + "-chess").addClass("table-info");

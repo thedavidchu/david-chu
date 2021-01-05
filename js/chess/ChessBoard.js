@@ -100,12 +100,11 @@ class ChessBoard {
 		'use strict';
 
 		// 0. Check whose turn
-		if (Math.sign(this.board[i]) == this.turn) {
-			// Allow
-		} else {return false;}
+		if (Math.sign(this.board[i]) == this.turn) {/* Allow */} else {return false;}
 
 		// 1. Check if there is a piece at i
 		if (this.board[i] == 0) {return false;}
+		
 		// 2. Check if legal move
 		let legal = this.#legal_moves(i, true);
 		if (!legal.includes(j)) {return false;}
@@ -313,12 +312,9 @@ class ChessBoard {
 		} else {return false;}		// ERROR!
 	}
 
-	#check_end_game() {
+	#check_king_captured() {
 		/**
-		Return true when a king is captured.
-
-		Is it faster to:
-			a. Check for both winning 
+		Return winning player when a king is captured.
 
 		:return:
 			- true if win
@@ -332,10 +328,13 @@ class ChessBoard {
 			if (this.board[i] == 1000) {white = true; if (black) {return false;}}
 			else if (this.board[i] == -1000) {black = true; if (white) {return false;}}
 		}
-		return true;
+		
+		if (white && !black) {return +1;}
+		else if (!white && black) {return -1;}
+		else {return true;}
 	}
 
-	check_win() {
+	get_king_captured() {
 		/**
 		Halt play once a king has been captured.
 
@@ -483,13 +482,13 @@ class ChessBoard {
 				moves = [-9, -8, -7, -1, +1, +7, +8, +9];
 				
 				// Check white castle - valid on [R, 57, 58, 59, K, 61, 62, R]
-				if (this.castle[2] && !this.board[57] && !this.board[58] && !this.board[59]) {
+				if (this.castle[2] && this.board[56] == 50 && !this.board[57] && !this.board[58] && !this.board[59]) {
 					if (check_castle) {
 						if (!this.#position_threatened([60, 59, 58], 1)) {legal.push(58);}
 					} else {legal.push(58);}
 				}
 
-				if (this.castle[3] && !this.board[61] && !this.board[62]) {
+				if (this.castle[3] && this.board[63] == 50 && !this.board[61] && !this.board[62]) {
 					if (check_castle) {
 						if (!this.#position_threatened([60, 61, 62], 1)) {legal.push(62);}
 					} else {legal.push(62);}
@@ -500,12 +499,12 @@ class ChessBoard {
 				moves = [-9, -8, -7, -1, +1, +7, +8, +9];
 
 				// Check black castle - valid on [ r,  1,  2,  3,  k,  5,  6,  r]
-				if (this.castle[0] && !this.board[1] && !this.board[2] && !this.board[3]) {
+				if (this.castle[0] && this.board[0] == -50 && !this.board[1] && !this.board[2] && !this.board[3]) {
 					if (check_castle) {
 						if (!this.#position_threatened([4, 3, 2], -1)) {legal.push(2);}
 					} else {legal.push(2);}
 				}
-				if (this.castle[1] && !this.board[5] && !this.board[6]) {
+				if (this.castle[1] && this.board[7] == -50 && !this.board[5] && !this.board[6]) {
 					if (check_castle) {
 						if (!this.#position_threatened([4, 5, 6], -1)) {legal.push(6);}
 					} else {legal.push(6);}
@@ -731,6 +730,22 @@ class ChessBoard {
 			element.innerHTML = letter[this.board[i]];
 		}
 	}
+
+	reset(board=null) {
+		if (board == null) {
+			this.board = [0, 0, 0, 0, 0, 0, 0, -50, 
+						0, 0, 0, 0, 0, -1000, -10, 0, 
+						-10, 0, 0, -10, -31, 0, 0, -10, 
+						0, 0, 0, -10, 0, 0, 0, 0, 
+						0, 0, -50, 0, 10, 0, 0, 0, 
+						0, 0, 0, -30, 31, 10, 0, 0, 
+						0, 50, 0, 0, 30, 0, 10, 10, 
+						0, 0, 0, 0, 1000, 31, 0, 50];
+		} else {this.board = board;}
+		this.update_board();
+		this.turn = 1;
+		return "RESET!";
+	}
 	
 	// ============================== AI PLAY ============================== //
 	#evaluate() {
@@ -899,6 +914,7 @@ class ChessBoard {
 		return tally;
 	}
 
+	// DEPRECIATED -- at least when using for min/max tree
 	#simulate(player, layers) {
 		/**
 		Simulate layers from now.
@@ -910,6 +926,8 @@ class ChessBoard {
 
 		** N.B. Due to minmax tree, we only need to evaluate the leaves.
 		** If player has won, do not search further
+
+		MINMAX TREE USING THIS IS DEPRECIATED
 
 		:param player: int - player (+1 or -1).
 		:param layers: int - number of layers to iterate through.
@@ -962,11 +980,14 @@ class ChessBoard {
 		return possible;
 	}
 
+	// DEPRECIATED
 	#naive_best_move_help(player, possible) {
 		/**
 		Search naive minmax tree for ideal move.
 
 		N.B. The minmax tree was created in simulate.
+
+		DEPRECIATED
 
 		:param player:
 		:param possible:
@@ -1013,9 +1034,12 @@ class ChessBoard {
 		}
 	}
 
+	// DEPRECIATED
 	#naive_best_move(player, layers){
 		/**
 		Get the best move using a naive minmax tree.
+
+		DEPRECIATED
 
 		:param player: which player
 		:param layers: number of layers forward to look
@@ -1034,10 +1058,10 @@ class ChessBoard {
 		let possible = this.#simulate(turn, layers);
 		let best_move = this.#naive_best_move_help(turn, possible);
 
-		console.log(best_move);
 		return best_move;
 	}
 
+	// DEPRECIATED
 	naive_play_game(layers) {
 		/**
 		Advance one move with the naive minmax tree.
@@ -1066,13 +1090,18 @@ class ChessBoard {
 		}
 	}
 	
-	#alpha_beta(layers, alpha, beta, player) {
+	#alpha_beta(layers, alpha, beta, player, random) {
 		/**
 		Call alpha-beta pruned tree.
 
 		Initial call: alpha_beta(origin, depth, -Infinity, +Infinity, 1).
 
 		Yes, alright, I got the pseudocode off of Wikipedia. Fine, you win. Thanks for reading my comments.
+
+		## TODO???
+			- Evaluate each move in its current configuration, then sort. Search best first.
+				- Should make alpha-beta pruning more effective (i.e. discard more)???
+				- Say this doubles the computation on each node. Then to break even, we must discard at least (1 - 2^(-1/4) ~= 16% more moves) when we search 4 layers deep.
 
 		:param board: board that we want
 		:param layers:
@@ -1083,8 +1112,9 @@ class ChessBoard {
 
 		'use strict';
 
-		// End search if the bottom layer or the game has finished
-		if (layers <= 0 || this.#check_end_game()) {return [null, this.#evaluate()];}
+		// End search if the bottom layer or the game has finished. This is noticeably faster!
+		if (layers <= 0){return [null, this.#evaluate()];}
+		else if (this.#check_king_captured()) {return [null, this.#evaluate()];}
 
 		// End search if no legal moves
 		let legal = this.#legal_triple();
@@ -1096,10 +1126,16 @@ class ChessBoard {
 				let child = new ChessBoard(this.board, this.prev_move, this.turn, this.castle);
 				child.#move(...legal[i]);
 				// Find max
-				let prune = child.#alpha_beta(layers-1, alpha, beta, -1);
-				if (prune[1] > value[1]) {
-					value = prune;
+				let prune = child.#alpha_beta(layers-1, alpha, beta, -1, random);
+				
+// TEST!!!
+				if (prune[0] != null) {
+					console.log(this.board[prune[0][0]], prune[0][1]);
+					if (this.board[prune[0][0]] == 50 && prune[0][1] == 9) {console.log(prune);}
 				}
+// TEST!!!
+				if (prune[1] > value[1]) {value = prune;} 
+				else if (prune[1] == value[1] && random && Math.random() > 0.5) {value = prune;}
 				// Find alpha
 				alpha = Math.max(alpha, value[1]);
 				if (alpha >= beta) {break;}
@@ -1111,10 +1147,9 @@ class ChessBoard {
 				let child = new ChessBoard(this.board, this.prev_move, this.turn, this.castle);
 				child.#move(...legal[i]);
 				// Find min
-				let prune = child.#alpha_beta(layers-1, alpha, beta, +1);
-				if (prune[1] < value[1]) {
-					value = prune;
-				}
+				let prune = child.#alpha_beta(layers-1, alpha, beta, +1, random);
+				if (prune[1] < value[1]) {value = prune;} 
+				else if (prune[1] == value[1] && random && Math.random() > 0.5) {value = prune;}
 				// Find beta
 				beta = Math.min(beta, value[1]);
 				if (beta <= alpha) {break;}
@@ -1132,15 +1167,17 @@ class ChessBoard {
 
 		'use strict';
 		
-		let best_move = this.#alpha_beta(layers, -Infinity, +Infinity, this.turn);
+		let best_move = this.#alpha_beta(layers, -Infinity, +Infinity, this.turn, false);
 		let i = null, j = null, k = null;
 
 		// {Take a turn
-		if (!this.check_win()) {
+		if (!this.#check_king_captured()) {
 			best_move = this.#naive_best_move(this.turn, layers);
 			i = best_move[0][0];
 			j = best_move[0][1];
 			k = best_move[0][2];
+
+			console.log("BEST MOVE RATING:", best_move[1])
 
 			this.#move(i, j, k);
 			this.update_board();
