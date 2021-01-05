@@ -1,45 +1,47 @@
 /* stylesheet.css */
 
+
 /* ============================== CHESS ============================== */
+$darkpaleblue: 
+
 
 .white-square {
-    /* Bootstrap -light (~lightgray)*/
-    background-color: white;
+    background-color: ivory;    /* white */
 }
 
 .black-square {
-    /* Bootstrap -dark (~gray)*/
-    background-color: grey;
+    background-color: dimgrey;  /* dark grey */
 }
 
 .chess-moved {
-    background-color: lightgreen;
+    /* border-color: #b8e8b8; */   /* light, pale green */
+    border-width: 21px;
 }
 
 .chess-passive-hover {
-    /* Bootstrap -active??? */
-    /*background-color: lightgray;*/
+    /* None */
+    /* background-color: lightgray; */
 }
 
 .chess-active-hover {
     /* Bootstrap -info (~teal) */
-    background-color: lightcyan;
+    background-color: lightcyan;    /* light, pale blue */
 }
 
 .chess-active {
-    background-color: lightsteelblue;
+    background-color: #b7e1fc;    /* dark, pale blue */
 }
 
 .chess-legal {
-    background-color: powderblue;
+    background-color: lightyellow;  /* light, pale yellow */
 }
 
 .chess-attacked {
-    background-color: indianred;
+    background-color: indianred;    /* light, pale red */
 }
 
 .chess-legal-hover {
-    background-color: seagreen;
+    background-color: #cefdce;  /* ligh, pale turqoise-green */
 }
 
 

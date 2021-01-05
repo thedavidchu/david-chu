@@ -91,7 +91,7 @@
 
             <hr>
 
-            <table class= "table table-bordered">
+            <table class= "table table-bordered border-dark">
                 <thead></thead>
                 <tbody id="chess_board"></tbody>
             </table>
@@ -131,9 +131,9 @@
 
             <div class="container">
                 <h3>Warnings</h3>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><b>There may be bugs. If you are trying to discretely win a chess tournament, please do not use this engine unless you want to risk losing. If you find a bug, please let me know!</b></li>
-                    <li class="list-group-item"><b>The AI is not necessarily deterministic. I have added randomness to it; however you can switch this randomness off.</b></li>
+                    <p><b>Bugs: </b>There may be bugs. If you are trying to discretely win a chess tournament, please do not use this engine unless you want to risk losing. If you find a bug, please let me know!</p>
+                    <p><b>Determinism: </b>The AI is not necessarily deterministic. I have added randomness to it; however you can switch this randomness off.</p>
+                    <p><b>Colours: </b>The colour palette doesn't quite sit right. I tried to go with pastel colours, but I have no training in UI design, so if you have any tips, please share them!</p>
                 </ul>
             </div>
 
@@ -251,10 +251,7 @@
             } else {
                 let class_name = $(this).attr("class");
 
-                if (class_name == undefined) {
-                    $(this).addClass("chess-passive-hover");
-                } else if (class_name.includes("chess-legal") || class_name.includes("chess-attacked")) {
-                    console.log('here')
+                if ($(this).hasClass("chess-legal") || $(this).hasClass("chess-attacked")) {
                     $(this).addClass("chess-legal-hover");
                 } else {
                     $(this).addClass("chess-passive-hover");
@@ -271,12 +268,6 @@
             /**
             Update board when it is clicked on.
             */
-
-            // let turn = check_turn($(this), board);
-            let class_name = $(this).attr("class");
-            console.log(class_name)
-
-            if (class_name == undefined) {console.log("no class"); return;}      // Error
 
             // Click on player piece
             // If selected, unselect
@@ -297,12 +288,12 @@
                 
                 board.get_move(a, b);
                 
-                $("td").removeClass("chess-active chess-legal chess-legal-hover chess-active-hover chess-attacked chess-moved");
+                $("td").removeClass("chess-active chess-legal chess-legal-hover chess-active-hover chess-attacked chess-moved border-danger");
                 $(this).addClass("chess-passive-hover");
 
                 // Change board colours
-                $("#" + a + "-chess").addClass("chess-moved");
-                $("#" + b + "-chess").addClass("chess-moved");
+                $("#" + a + "-chess").addClass("chess-moved border-danger");
+                $("#" + b + "-chess").addClass("chess-moved border-danger");
             } else {
                 // Unselect options
                 remove_selection();
