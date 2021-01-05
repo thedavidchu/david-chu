@@ -1284,10 +1284,10 @@ class ChessBoard {
 					break;
 			}
 
-			$("td").removeClass("table-info");
+			$("td").removeClass("chess-active chess-legal chess-legal-hover chess-active-hover chess-attacked chess-moved");
 
-			$("#"+best_move[0][0]+"-chess").addClass("table-info");
-			$("#"+best_move[0][1]+"-chess").addClass("table-info");
+			$("#"+best_move[0][0]+"-chess").addClass("chess-moved");
+			$("#"+best_move[0][1]+"-chess").addClass("chess-moved");
 		}
 	}
 }

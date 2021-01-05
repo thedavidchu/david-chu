@@ -228,9 +228,8 @@
         Removes selected piece.
         */
 
-        $(".chess-active").removeClass("chess-active");
-        $(".chess-legal").removeClass("chess-legal");
-        $(".chess-attacked").removeClass("chess-attacked");
+        $("td").removeClass("chess-active chess-legal chess-attacked");
+        return;
     }
 
 
@@ -251,11 +250,21 @@
             if (turn) {
                 $(this).addClass("chess-active-hover");
             } else {
-                $(this).addClass("chess-passive-hover");
+                let class_name = $(this).attr("class");
+
+                if (class_name == undefined) {
+                    $(this).addClass("chess-passive-hover");
+                } else if (class_name.includes("chess-legal") || class_name.includes("chess-attacked")) {
+                    console.log('here')
+                    $(this).addClass("chess-legal-hover");
+                } else {
+                    $(this).addClass("chess-passive-hover");
+                } 
             }
+            return;
 
         }, function() {
-            $(this).removeClass("chess-passive-hover chess-active-hover");
+            $(this).removeClass("chess-passive-hover chess-active-hover chess-legal-hover");
         });
 
         // Clicking on chess board
@@ -264,60 +273,41 @@
             Update board when it is clicked on.
             */
 
-            let turn = check_turn($(this), board);
+            // let turn = check_turn($(this), board);
+            let class_name = $(this).attr("class");
+            console.log(class_name)
+
+            if (class_name == undefined) {console.log("no class"); return;}      // Error
 
             // Click on player piece
-            if (turn) {
+            // If selected, unselect
+            if ($(this).hasClass("chess-active")) {
                 // Unselect options
                 remove_selection();
+            // If not selected, unselect old and select new.
+            } else if ($(this).hasClass("chess-active-hover")) {
+                // Unselect options
+                remove_selection();
+                // Select new
                 $(this).addClass("chess-active");
                 highlight_legal($(this), board);
-            } else {
-                let class_name = $(this).attr("class");
-
-                if (class_name == undefined) {/* pass */}
-                // Click on selected piece -- unselect
-                else if (class_name.includes("chess-active")) {
-                    remove_selection();
-                }
-            }
-
-            // let class_name = $(this).attr("class");
-            
-            // // Deselect selected piece
-            // if (class_name.includes("table-danger")) {
-            //     $("td").removeClass("table-danger table-warning table-success table-active");
-            //     $(this).addClass("table-active");
-            // // Choose piece move
-            // } else if (class_name.includes("table-success")) {      // NOTE: table-warning has priority over table-success, so I actually removed the table-warning class
-            //     let a = parseInt($(".table-danger").attr("id"));
-            //     let b = parseInt($(this).attr("id"));
-            //     board.get_move(a, b);
-            //     $("td").removeClass("table-danger table-warning table-success table-active table-info");
-            //     $(this).addClass("table-active");
-
-            //     // Change board colours
-            //     $("#" + a + "-chess").addClass("table-info");
-            //     $("#" + b + "-chess").addClass("table-info");
-
-            // } else {
-            //     // If piece, select
-            //     if ($(this).html() != "&nbsp;" && check_turn($(this))) {
-            //         $("td").removeClass("table-danger table-warning table-success table-active");
-            //         $(this).addClass("table-active");
-            //         $(this).addClass("table-danger");
-            //         let id = parseInt($(this).attr("id"));
-            //         let legal = board.get_legal_moves(id);
-            //         for (let i of legal) {
-            //             $("#"+i+"-chess").toggleClass("table-warning");
-            //         }
-            //     // If not piece, deselect
-            //     } else {
-            //         $("td").removeClass("table-danger table-warning table-success table-active");
-            //         $(this).addClass("table-active");
-            //     }
+            // If legal move, move the piece
+            } else if ($(this).hasClass("chess-legal-hover")) {
+                let a = parseInt($(".chess-active").attr("id"));
+                let b = parseInt($(this).attr("id"));
                 
-            // }
+                board.get_move(a, b);
+                
+                $("td").removeClass("chess-active chess-legal chess-legal-hover chess-active-hover chess-attacked chess-moved");
+                $(this).addClass("chess-passive-hover");
+
+                // Change board colours
+                $("#" + a + "-chess").addClass("chess-moved");
+                $("#" + b + "-chess").addClass("chess-moved");
+            } else {
+                // Unselect options
+                remove_selection();
+            }
         });
     });
     

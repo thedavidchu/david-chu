@@ -43,6 +43,10 @@
     background-color: grey;
 }
 
+.chess-moved {
+    background-color: mediumseagreen;
+}
+
 .chess-passive-hover {
     /* Bootstrap -active??? */
     background-color: lightgray;
@@ -66,12 +70,10 @@
 }
 
 .chess-legal-hover {
-    background-color: green;
+    background-color: lightgreen;
 }
 
-.chess-move {
-    background-color: seagreen;
-}
+
 
 
 
