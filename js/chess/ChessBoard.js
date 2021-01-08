@@ -22,7 +22,7 @@ board indices =
 	[56, 57, 58, 59, 60, 61, 62, 63]])
 
 ## Known bugs
-	1. Game doesn't end with 3 repeated moves/ checkmate/ stalemate (goes until King capture)
+	1. Game doesn't end with 3 repeated moves -- Will need to record games
 	2. Gives notification of win/ draw before it updates board.
 	3. The AI can't checkmate itself!!!
 	4. If choose illegal move due to check, it will still turn squares blue as if you have moved.
@@ -34,6 +34,7 @@ board indices =
 	I finished this on January 2, 2021. I think I am going to freeze the code; I am not exactly a chess afficionado, so this is just purely for the fun of it.
 	I do not want to refine the model anymore. Of course, it could perform better, but that is beyond the scope of the time I have allotted.
 
+	I actually worked on it until January 8, 2020. I think I am going to freeze the code since I am going back to school.
 */
 
 
@@ -376,64 +377,6 @@ class ChessBoard {
 		// Return true if all positions result in check
 		return true;
 	}
-
-	// // DO NOT USE - INEFFICIENT
-	// #is_stalemate(player) {
-	// 	/**
-	// 	Determine if stalemate.
-
-	// 	:param player:
-	// 	:return: bool - whether stalemate or not (i.e. NOT in check, but no legal move).
-	// 	*/
-
-	// 	'use strict';
-
-	// 	return this.#is_check_next_move(player) && !this.#is_check(player);
-	// }
-
-	// // DO NOT USE - INEFFICIENT
-	// get_stalemate(raw_player) {
-	// 	/**
-	// 	Determine if stalemate.
-
-	// 	:param player:
-	// 	:return: bool - whether stalemate or not (i.e. NOT in check, but no legal move).
-	// 	*/
-
-	// 	'use strict';
-
-	// 	let player = this.get_player(raw_player);
-	// 	return this.#is_stalemate(player);
-	// }
-
-	// // DO NOT USE - INEFFICIENT
-	// #is_checkmate(player) {
-	// 	/**
-	// 	Determines if check mate.
-
-	// 	:param player: player (+1 or -1)
-	// 	:return: bool - whether they are in checkmate or not.
-	// 	*/
-
-	// 	'strict mode';
-
-	// 	return this.#is_check(player) && this.#is_check_next_move(player);
-	// }
-
-	// // DO NOT USE - INEFFICIENT
-	// get_checkmate(raw_player) {
-	// 	/**
-	// 	Determines if check mate.
-
-	// 	:param player: player (+1 or -1)
-	// 	:return: bool - whether they are in checkmate or not.
-	// 	*/
-
-	// 	'strict mode';
-
-	// 	let player = this.get_player(raw_player);
-	// 	return this.#is_checkmate(player);
-	// }
 
 	#is_mate(player) {
 		/**
@@ -1312,3 +1255,71 @@ class ChessBoard {
 		}
 	}
 }
+
+
+
+/* ============================== UNUSED CODE ============================== */
+
+/*
+I believe that it works, there is just no point in using it.
+*/ 
+
+// Stalemate and Checkmate
+
+// // DO NOT USE - INEFFICIENT
+// #is_stalemate(player) {
+// 	/**
+// 	Determine if stalemate.
+
+// 	:param player:
+// 	:return: bool - whether stalemate or not (i.e. NOT in check, but no legal move).
+// 	*/
+
+// 	'use strict';
+
+// 	return this.#is_check_next_move(player) && !this.#is_check(player);
+// }
+
+// // DO NOT USE - INEFFICIENT
+// get_stalemate(raw_player) {
+// 	/**
+// 	Determine if stalemate.
+
+// 	:param player:
+// 	:return: bool - whether stalemate or not (i.e. NOT in check, but no legal move).
+// 	*/
+
+// 	'use strict';
+
+// 	let player = this.get_player(raw_player);
+// 	return this.#is_stalemate(player);
+// }
+
+// // DO NOT USE - INEFFICIENT
+// #is_checkmate(player) {
+// 	/**
+// 	Determines if check mate.
+
+// 	:param player: player (+1 or -1)
+// 	:return: bool - whether they are in checkmate or not.
+// 	*/
+
+// 	'strict mode';
+
+// 	return this.#is_check(player) && this.#is_check_next_move(player);
+// }
+
+// // DO NOT USE - INEFFICIENT
+// get_checkmate(raw_player) {
+// 	/**
+// 	Determines if check mate.
+
+// 	:param player: player (+1 or -1)
+// 	:return: bool - whether they are in checkmate or not.
+// 	*/
+
+// 	'strict mode';
+
+// 	let player = this.get_player(raw_player);
+// 	return this.#is_checkmate(player);
+// }
