@@ -22,7 +22,7 @@
         </style>
 
         <!-- Favicon -->
-        <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/android-chrome-512x512.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon/android-chrome-512x512.png">
 
         <title>David Chu - Sudoku</title>
     </head>
@@ -77,11 +77,12 @@
         </div>
 
          <div id="Sudoku" class="container">
+            <script src="../js/sudoku/sudoku.js"></script>
+
             <table class= "table table-bordered chess-board">
                 <thead></thead>
                 <tbody id="sudoku_board"></tbody>
             </table>
-            
         </div>
 
 
@@ -99,10 +100,17 @@
 
 <!-- ============================== CODE TO LOAD AT THE END ============================== -->
 
-
 <script>
-    /**
-    Note: this only allows for 1 board.
-    */
-    
+    // N.B. TODO: setup board nicely and allow inputs
+    // 
+    // function table_input(element_id, input, allowed_values=null) {
+    //     if allowed_values == null:
+    //         document.getElementById(element_id).innerText = input;
+    //     else if input in allowed_values:
+    //         document.getElementById(element_id).innerTest = input;
+    //     else:
+    //         warnings.warn('You cannot do that!')
+    //         reject input
+    // }
+    setup_board(board);
 </script>
